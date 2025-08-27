@@ -20,3 +20,12 @@ variable "allowed_ports" {
   type = list(number)
   default = [443,80]
 }
+variable "my_ipv4" {
+  default = "212.58.119.49/32"
+}
+variable "vpc_cidr" {
+  default = "10.0.0.0/16"
+}
+variable "public_subnet_1_cidr" {
+  default = "10.0.0.0/24"
+}

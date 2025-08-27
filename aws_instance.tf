@@ -1,9 +1,9 @@
 module "my_instance" {
   ami = data.aws_ami.EC2_Latest_AMI.image_id
   source = "./module-1/"
-  subnet_id = var.subnet_id
+  subnet_id = aws_subnet.public.id
   instance_type = var.instance_type
-  key_name = "windows_key"
+  key_name = "linux_key"
   user_data = <<-EOF
       #!/bin/bash
     sudo yum update -y

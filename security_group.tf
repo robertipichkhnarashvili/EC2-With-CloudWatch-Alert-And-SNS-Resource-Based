@@ -4,24 +4,41 @@ resource "aws_security_group" "allow_SSH_HTTP_HTTPS" {
   tags = {
     Name = "SSH-SG"
   }
+  vpc_id = aws_vpc.main_vpc.id
 }
-resource "aws_vpc_security_group_ingress_rule" "allow_ingress_ssh" {
+# Allow SSH Ingress & Egress
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.allow_SSH_HTTP_HTTPS.id
-  cidr_ipv4 = var.allow_all_ipv4
   from_port = 22
-  ip_protocol = "tcp"
   to_port = 22
+  ip_protocol = "tcp"
+  cidr_ipv4 = var.allow_all_ipv4
 }
-resource "aws_vpc_security_group_egress_rule" "allow_egress_all" {
+resource "aws_vpc_security_group_egress_rule" "allow_ssh" {
+  security_group_id = aws_security_group.allow_SSH_HTTP_HTTPS.id
+  ip_protocol = "tcp"
+  from_port = 22
+  to_port = 22
+  cidr_ipv4 = var.allow_all_ipv4
+}
+# Allow HTTP Ingress & Egress
+resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+  security_group_id = aws_security_group.allow_SSH_HTTP_HTTPS.id
+  from_port = 80
+  to_port = 80
+  ip_protocol = "tcp"
+  cidr_ipv4 = var.allow_all_ipv4
+}
+resource "aws_vpc_security_group_egress_rule" "allow_http" {
   security_group_id = aws_security_group.allow_SSH_HTTP_HTTPS.id
   ip_protocol = "-1"
   cidr_ipv4 = var.allow_all_ipv4
 }
-resource "aws_vpc_security_group_ingress_rule" "allow_allowed_ports" {
+# Allow HTTPS Ingress & Egress
+resource "aws_vpc_security_group_ingress_rule" "allow_https" {
   security_group_id = aws_security_group.allow_SSH_HTTP_HTTPS.id
-  cidr_ipv4 = var.allow_all_ipv4
-  for_each = {for port in var.allowed_ports : port => port}
-  from_port = tonumber(each.value)
+  from_port = 443
+  to_port = 443
   ip_protocol = "tcp"
-  to_port = tonumber(each.value)
+  cidr_ipv4 = var.allow_all_ipv4
 }

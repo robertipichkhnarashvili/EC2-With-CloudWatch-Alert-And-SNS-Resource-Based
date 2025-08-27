@@ -1,4 +1,5 @@
 # Creating Cloudwatch metric alarm
+
 resource "aws_cloudwatch_metric_alarm" "cloudwatch" {
   alarm_name = "terraform-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
