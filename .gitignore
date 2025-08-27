@@ -1,0 +1,6 @@
+.terraform
+private_key.pem
+windows_key.ppk
+text.text
+terraform.tfstate
+terraform.tfstate.backup
