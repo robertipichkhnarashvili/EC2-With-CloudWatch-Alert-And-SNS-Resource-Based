@@ -9,18 +9,19 @@ resource "aws_instance" "monitored_ec2" {
   connection {
     type = "ssh"
     user = "ec2-user"
-    host = self.host_id
-    private_key = file("${path.root}/private_key.pem")
+    host = self.public_ip
+    private_key = var.private_key
   }
   provisioner "remote-exec" {
     inline = [
       "sudo amazon-linux-extras install epel -y",
       "sudo yum install stress -y",
-      "sudostress --cpu 8 --timeout 800"
+      "sudo stress--cpu 8 --timeout 800 >/dev/null 2>&1 &"
     ]
   }
 }
 variable "subnet_id" {}
+variable "private_key" {}
 variable "instance_type" {}
 variable "iam_instance_profile" {}
 variable "key_name" {}
