@@ -1,5 +1,5 @@
 resource "aws_sns_topic" "sns_cloudwatch" {
-  name = "cloudwatch_alerts"
+  name = "cloudwatch_alerts_CPU"
 }
 resource "aws_sns_topic_subscription" "email_alert" {
   topic_arn = aws_sns_topic.sns_cloudwatch.arn

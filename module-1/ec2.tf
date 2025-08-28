@@ -16,7 +16,7 @@ resource "aws_instance" "monitored_ec2" {
     inline = [
       "sudo amazon-linux-extras install epel -y",
       "sudo yum install stress -y",
-      "sudo stress --cpu 8 --timeout 800 >/dev/null 2>&1 &"
+      "sudo nohup stress --cpu 8 --timeout 800 >/dev/null 2>&1 &"
     ]
   }
 }

@@ -8,6 +8,7 @@ resource "aws_iam_role" "ec2_cloudwatch_role" {
       Effect = "Allow"
       Principal = {
         Service = "ec2.amazonaws.com"
+        
       }
     }]
   })
@@ -34,7 +35,8 @@ resource "aws_iam_policy" "cloudwatch_agent_policy" {
       {
         Effect = "Allow"
         Action = [
-          "ssm:GetParameter"
+          "ssm:GetParameter",
+          "ssm:DescribeParameters"
         ]
         Resource = "arn:aws:ssm:${var.default_region}:${data.aws_caller_identity.current.account_id}:parameter/AmazonCloudWatch-*"
       }

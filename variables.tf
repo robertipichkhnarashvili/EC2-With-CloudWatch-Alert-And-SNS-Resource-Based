@@ -2,6 +2,7 @@ variable "subnet_id" {
   default = "subnet-0927c1fcfe88a715a"
 }
 variable "default_CPU_treshold" {
+  type = number
   default = 80
 }
 variable "default_region" {
