@@ -8,7 +8,6 @@ resource "aws_iam_role" "ec2_cloudwatch_role" {
       Effect = "Allow"
       Principal = {
         Service = "ec2.amazonaws.com"
-        
       }
     }]
   })

@@ -5,3 +5,7 @@ text.text
 terraform.tfstate
 terraform.tfstate.backup
 linux_key.pem
+wget-log.txt
+module-1/
+module-1/*
+text.txt

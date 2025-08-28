@@ -1,11 +1,9 @@
-module "my_instance" {
+resource "aws_instance" "my_instance" {
   ami = data.aws_ami.EC2_Latest_AMI.image_id
-  source = "./module-1/"
   subnet_id = aws_subnet.public.id
   instance_type = var.instance_type
-  private_key = file("./linux_key.pem")
   key_name = "linux_key"
-user_data = <<-EOF
+  user_data = <<-EOF
     #!/bin/bash
     sudo yum update -y
     sudo yum install -y amazon-cloudwatch-agent
@@ -28,6 +26,7 @@ user_data = <<-EOF
           "cpu_usage_system"
         ],
         "metrics_collection_interval": 60,
+        "resources" : ["*"],
         "totalcpu": true
       },
       "mem": {
@@ -56,11 +55,22 @@ EOL
         -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
 
     sudo systemctl enable amazon-cloudwatch-agent
+    sudo systemctl start amazon-cloudwatch-agent
 EOF
 
   iam_instance_profile = aws_iam_instance_profile.cloudwatch_profile.name
   vpc_security_group_ids = [aws_security_group.allow_SSH_HTTP_HTTPS.id]
-}
-output "instance_ids" {
-  value = module.my_instance.instance_id
+  connection {
+    type = "ssh"
+    user = "ec2-user"
+    host = self.public_ip
+    private_key = file("linux_key.pem")
+  }
+  provisioner "remote-exec" {
+        inline = [
+      "sudo amazon-linux-extras install epel -y",
+      "sudo yum install stress -y",
+      "sudo nohup stress --cpu 8 --timeout 800 >/dev/null 2>&1 &"
+    ]
+  }
 }
