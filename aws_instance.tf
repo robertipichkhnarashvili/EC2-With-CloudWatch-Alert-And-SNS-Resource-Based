@@ -2,7 +2,7 @@ resource "aws_instance" "my_instance" {
   ami = data.aws_ami.EC2_Latest_AMI.image_id
   subnet_id = aws_subnet.public.id
   instance_type = var.instance_type
-  key_name = "linux_key"
+  key_name = "key"
   user_data = <<-EOF
     #!/bin/bash
     sudo yum update -y
@@ -64,7 +64,7 @@ EOF
     type = "ssh"
     user = "ec2-user"
     host = self.public_ip
-    private_key = file("linux_key.pem")
+    private_key = file("key.pem")
   }
   provisioner "remote-exec" {
         inline = [
